@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "m_usb.h"
 #define F_CPU 16000000UL
 #define MAX_PWM_FREQ 200000UL
@@ -114,27 +115,43 @@ uint32_t getFirstTwoDigits(uint32_t num) {
 }
 
 // Function to parse frequency string (like "30.10") to Hz (30100)
-uint32_t parseFrequency(const char* str) {
-	char* dot = strchr(str, '.');
-	if (dot == NULL) {
-		// No decimal point, treat as integer Hz
-		return atol(str);
+// Modify parseFrequency to handle negatives
+int32_t parseFrequency(const char* str) {
+    bool negative = false;
+    const char* num_start = str;
+    
+    // Check for negative sign
+    if(str[0] == '-') {
+        negative = true;
+        num_start = &str[1]; // Skip the '-' sign
+    }
+    
+    char* dot = strchr(num_start, '.');
+    if (dot == NULL) {
+        // No decimal point, treat as integer Hz
+        int32_t value = atol(num_start);
+        return negative ? -value : value;
+    }
+    
+    // Split into integer and fractional parts
+    char intPart[16] = {0};
+    char fracPart[16] = {0};
+    
+    strncpy(intPart, num_start, dot - num_start);
+    strncpy(fracPart, dot + 1, sizeof(fracPart) - 1);
+    
+    uint32_t integer = atol(intPart);
+    uint32_t fraction = atol(fracPart);
+    uint32_t frac_2Digits = getFirstTwoDigits(fraction);
+    
+    // Calculate final frequency in Hz
+    int32_t result = (integer * 1000) + frac_2Digits*10;
+	if (negative) {
+		return -result;
 	}
-	
-	// Split into integer and fractional parts
-	char intPart[16] = {0};
-	char fracPart[16] = {0};
-	
-	strncpy(intPart, str, dot - str);
-	strncpy(fracPart, dot + 1, sizeof(fracPart) - 1);
-	
-	uint32_t integer = atol(intPart);
-	uint32_t fraction = atol(fracPart);
-	
-	uint32_t frac_2Digits = getFirstTwoDigits(fraction);
-	
-	// Calculate final frequency in Hz
-	return (integer * 1000) + frac_2Digits*10;
+	else {
+		return result;
+	}
 }
 
 void initialize(void) {
@@ -156,10 +173,10 @@ int main(void) {
 					if (strncmp(inputBuffer, "set ", 4) == 0) {
 						char *token = strtok(&inputBuffer[4], " ");
 						if (token != NULL) {
-							uint32_t pwm1 = parseFrequency(token);
+							int32_t pwm1 = parseFrequency(token);
 							token = strtok(NULL, " ");
 							if (token != NULL) {
-								uint32_t pwm3 = parseFrequency(token);
+								int32_t pwm3 = parseFrequency(token);
 
 								if (pwm1 > 0) {
 									if (!pwm1Started) {
@@ -180,32 +197,12 @@ int main(void) {
 									} else if (pwm3Started) {
 									StopPWM_OC3A();
 								}
-
-								// Format the output to show decimal point
-								m_usb_tx_string("PWM updated to ");
-								m_usb_tx_uint(pwm1 / 100);
-								m_usb_tx_string(".");
-								if ((pwm1 % 100) < 10) m_usb_tx_string("0");
-								m_usb_tx_uint(pwm1 % 100);
-								m_usb_tx_string("kHz and ");
-								m_usb_tx_uint(pwm3 / 100);
-								m_usb_tx_string(".");
-								if ((pwm3 % 100) < 10) m_usb_tx_string("0");
-								m_usb_tx_uint(pwm3 % 100);
-								m_usb_tx_string("kHz\r\n");
-								} else {
-								m_usb_tx_string("Missing PWM3 value\r\n");
 							}
-							} else {
-							m_usb_tx_string("Invalid set command\r\n");
-						}
+							}
 						} else if (strcmp(inputBuffer, "off") == 0) {
 						StopPWM_OC1A();
 						StopPWM_OC3A();
-						m_usb_tx_string("Both PWM stopped\r\n");
-						} else {
-						m_usb_tx_string("Unknown command\r\n");
-					}
+						}
 
 					bufferIndex = 0;
 					} else if (bufferIndex < BUFFER_SIZE - 1) {
