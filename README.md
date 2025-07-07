@@ -26,7 +26,7 @@ We chose this microcontroller for its rich feature set and integrated USB functi
 
 - **IDE**: [Microchip Studio](https://www.microchip.com/en-us/tools-resources/develop/microchip-studio) (formerly Atmel Studio)
 - **Language**: C (AVR-GCC compiler)
-- **Debugger/Programmer**: USB bootloader (via LUFA or Arduino-compatible bootloader)
+- **Debugger/Programmer**: USB bootloader (via LUFA)
 
 ---
 
