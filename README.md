@@ -28,6 +28,22 @@ We chose this microcontroller for its rich feature set and integrated USB functi
 - **Language**: C (AVR-GCC compiler)
 - **Debugger/Programmer**: USB bootloader (via LUFA or Arduino-compatible bootloader)
 
-> **Note**: Make sure you have the ATmega32U4 board drivers installed on your system to enable serial communication and flashing over USB.
+---
+
+## 🚀 Features 
+
+- Motor control using PWM
+- Control Motors according to serial commands via USB
 
 ---
+
+## 🛠️ How to Build & Flash
+
+1. Open the solution in **Microchip Studio**.
+2. Connect the AMR board via USB.
+3. Ensure ATmega32U4 is in bootloader mode (if needed).
+4. Press **F5** to build and flash.
+5. Use **Serial Terminal** or **Data Visualizer** for debugging.
+
+---
+
