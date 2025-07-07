@@ -57,31 +57,12 @@ int main(void) {
 								UpdatePWM_OC3A(pwm3_freq);
 								pre_pwm1_freq = pwm1_freq;
 								pre_pwm3_freq = pwm3_freq;
-								}
 							}
+						}
 						} else if (strcmp(inputBuffer, "off") == 0) {
-							while (abs(dup_pwm1_freq) + abs(dup_pwm3_freq) >= 300) {
-								if (pre_pwm1_freq > 0) {
-									dup_pwm1_freq -= 100;
-								}
-								else if (pre_pwm1_freq < 0) {
-									dup_pwm1_freq += 100;
-								}
-								if (pre_pwm3_freq > 0) {
-									dup_pwm3_freq -= 100;
-								}
-								else if (pre_pwm3_freq < 0) {
-									dup_pwm3_freq += 100;
-								}
-								
-								UpdatePWM_OC1A(dup_pwm1_freq);
-								UpdatePWM_OC3A(dup_pwm3_freq);
-								_delay_ms(10);
-								
-							}
 							StopPWM_OC1A();
 							StopPWM_OC3A();
-						}
+					}
 
 					bufferIndex = 0;
 					} else if (bufferIndex < BUFFER_SIZE - 1) {
