@@ -1,4 +1,5 @@
 
+
 #include "src.h"
 
 
@@ -27,16 +28,17 @@ int main(void) {
 								float omega = atof(token);  // angular velocity
 
 								// Constants
-								float s = 0.57; // distance between wheels, 0.585
+								float s = 0.5549; // distance between wheels, 0.585
 								double pi = 3.141592653589793;
+								double gearRatio = 10.30927835;
 
 								// Velocity for each wheel
 								float vl = v - (s / 2.0) * omega;
 								float vr = v + (s / 2.0) * omega;
 
 								// Frequency calculation
-								double fl = (12800000.0 / (12.3 * pi)) * vl; //12.7
-								double fr = (12800000.0 / (12.3 * pi)) * vr;
+								double fl = (1280000.0 * gearRatio/ (12.3 * pi)) * vl; //12.7
+								double fr = (1280000.0 * gearRatio/ (12.3 * pi)) * vr;
 
 								// Convert to long for PWM functions
 								long pwm1_freq = (long)(fl);
