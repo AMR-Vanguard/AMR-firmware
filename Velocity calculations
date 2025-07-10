@@ -1,0 +1,21 @@
+# 📘 Differential Drive Kinematic Derivation
+
+## Inputs
+
+- Center linear velocity: `V` (m/s)
+- Angular velocity: `ω` (rad/s)
+- Distance between wheels: `s` (m)
+
+## Output: Individual Wheel Velocities
+
+To achieve the motion, we compute:
+
+\[
+v_L = V - \frac{s}{2} \cdot \omega
+\]
+\[
+v_R = V + \frac{s}{2} \cdot \omega
+\]
+
+- If `ω > 0`: turns left (inner = left wheel)
+- If `ω < 0`: turns right
