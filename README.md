@@ -43,7 +43,7 @@ We chose this microcontroller for its rich feature set and integrated USB functi
 2. Connect the AMR board via USB.
 3. Ensure ATmega32U4 is in bootloader mode (if needed).
 4. Press **F5** to build and flash.
-5. Use **Serial Terminal** or **Data Visualizer** for debugging.
+5. Use **Serial Terminal** or **Data Visualizer** for debugging.nnn
 
 ---
 # 🚗 Differential Drive Robot Calculations and Velocity Profile Controller
