@@ -115,5 +115,47 @@ void StopPWM_OC3A() {
 	pwm3Started = 0;
 }
 
+void handleCommands(char *token) {
+	if (token != NULL) {
+		float v = atof(token);  // linear velocity
+		token = strtok(NULL, " ");
+		if (token != NULL) {
+			float omega = atof(token);  // angular velocity
+
+			// Constants
+			float s = 0.5549; // distance between wheels, 0.585
+			double pi = 3.141592653589793;
+			double gearRatio = 10.30927835;
+
+			// Velocity for each wheel
+			float vl = v - (s / 2.0) * omega;
+			float vr = v + (s / 2.0) * omega;
+
+			// Frequency calculation
+			double fl = (1280000.0 * gearRatio/ (12.3 * pi)) * vl; //12.7
+			double fr = (1280000.0 * gearRatio/ (12.3 * pi)) * vr;
+
+			// Convert to long for PWM functions
+			long pwm1_freq = (long)(fl);
+			long pwm3_freq = (long)(fr);
+			dup_pwm1_freq = pwm1_freq;
+			dup_pwm3_freq = pwm3_freq;
+
+			if (!pwm1Started) {
+				InitPWM_OC1A();
+				pwm1Started = 1;
+			}
+			if (!pwm3Started) {
+				InitPWM_OC3A();
+				pwm3Started = 1;
+			}
+			
+			UpdatePWM_OC1A(pwm1_freq);
+			UpdatePWM_OC3A(pwm3_freq);
+			pre_pwm1_freq = pwm1_freq;
+			pre_pwm3_freq = pwm3_freq;
+		}
+	}
+}
 
 #endif /* SRC_H_ */
