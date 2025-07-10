@@ -33,7 +33,7 @@ We chose this microcontroller for its rich feature set and integrated USB functi
 ## 🚀 Features 
 
 - Motor control using PWM
-- Control Motors according to serial commands via USB
+- Control Motors according to serial commands via USBmmm
 
 ---
 
