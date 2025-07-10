@@ -46,4 +46,23 @@ We chose this microcontroller for its rich feature set and integrated USB functi
 5. Use **Serial Terminal** or **Data Visualizer** for debugging.
 
 ---
+# 🚗 Differential Drive Robot Calculations and Velocity Profile Controller
+
+This repository provides a complete step-by-step explanation and source code for implementing a differential drive controller with acceleration profiles. The system is designed to receive velocity commands from a Jetson Nano and gradually adjust the motor frequencies to control a two-wheeled robot.
+
+---
+
+## 📌 Overview
+
+A differential-drive robot uses **two independently driven wheels** to move forward/backward and rotate. This repo documents:
+
+- The **mathematics** behind differential-drive kinematics.
+- The **conversion** from linear velocity to stepper motor frequency.
+- The **acceleration profile** logic for smooth and realistic control.
+- **Embedded C source code** that puts all this into action.
+
+---
+
+## 📁 Repository Structure
+
 
